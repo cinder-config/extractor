@@ -2,9 +2,7 @@ package ch.uzh.ciclassifier.features;
 
 import ch.uzh.ciclassifier.helper.Configuration;
 
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.LineNumberReader;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -18,7 +16,7 @@ public class NumberOfStages implements BaseFeature {
         Configuration configuration = new Configuration(configPath);
         Set<String> stages = new HashSet<String>();
 
-        LinkedHashMap jobs = (LinkedHashMap) configuration.getConfiguration().get("jobs");
+        LinkedHashMap jobs = (LinkedHashMap) configuration.getParsed().get("jobs");
         String previousStage = null;
         int counter = 0;
         if (null != jobs) {
@@ -43,7 +41,7 @@ public class NumberOfStages implements BaseFeature {
             this.stages = 1;
         }
 
-        System.out.println(configuration.getConfiguration());
+        System.out.println(configuration.getParsed());
     }
 
     public Integer getStages() {

@@ -11,6 +11,9 @@ env:
     - MAVEN_OPTS=-Xmx512m
     - MAVEN_VERSION=3.6.3
     - TAKARI_SMART_BUILDER_VERSION=0.6.1
+  jobs:
+    - USE_NETWORK=true
+    - USE_NETWORK=false
 before_script:
   - mkdir -p downloads
   - export MAVEN_ZIP=apache-maven-$MAVEN_VERSION-bin.zip

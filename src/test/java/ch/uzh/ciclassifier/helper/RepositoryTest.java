@@ -1,19 +1,35 @@
 package ch.uzh.ciclassifier.helper;
 
+import ch.uzh.ciclassifier.exception.ConfigurationMissingException;
+import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
 import java.io.IOException;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class RepositoryTest {
 
     @Test
     public void constructorTest() throws IOException {
-        Repository repository = new Repository("sale-workflow","https://github.com/OCA/sale-workflow.git");
+        Repository repository = new Repository("https://github.com/OCA/sale-workflow.git");
 
-        assertTrue(repository.location.exists());
+        Assertions.assertNotNull(repository.getGit());
+    }
+
+    @Test
+    public void getConfigurationTest() throws IOException {
+        Repository repository = new Repository("https://github.com/OCA/sale-workflow.git");
+        String configuration = repository.getConfiguration();
+
+        Assertions.assertNotNull(configuration);
+    }
+
+    @Test()
+    public void missingConfigurationTest() throws IOException {
+        Repository repository = new Repository("https://github.com/tzemp/master-thesis-proposal.git");
+
+        Exception exception = Assertions.assertThrows(ConfigurationMissingException.class, () -> {
+            String configuration = repository.getConfiguration();
+        });
     }
 }

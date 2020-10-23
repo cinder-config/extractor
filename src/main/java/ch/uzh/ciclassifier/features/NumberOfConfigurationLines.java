@@ -1,21 +1,35 @@
 package ch.uzh.ciclassifier.features;
 
-import java.io.*;
+import ch.uzh.ciclassifier.evaluation.Evaluation;
 
-public class NumberOfConfigurationLines implements BaseFeature {
+import java.io.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+public class NumberOfConfigurationLines implements Feature {
     private Integer lines = null;
 
     @Override
-    public void extract(String configPath) {
-        try (LineNumberReader reader = new LineNumberReader(new FileReader(configPath))) {
-            reader.skip(Integer.MAX_VALUE);
-            this.lines = reader.getLineNumber() + 1;
-        } catch (Exception e) {
-            e.printStackTrace();
+    public void extract(Evaluation evaluation) {
+        Matcher m = Pattern.compile("\r\n|\r|\n").matcher(evaluation.getRawConfiguration());
+        int lines = 1;
+        while (m.find()) {
+            lines++;
         }
+        this.lines = lines;
     }
 
     public Integer getLines() {
         return lines;
+    }
+
+    @Override
+    public String getData() {
+        return this.lines.toString();
+    }
+
+    @Override
+    public FeatureType supportedFeatureType() {
+        return FeatureType.CONFIGURATION;
     }
 }

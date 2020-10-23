@@ -2,23 +2,24 @@ package ch.uzh.ciclassifier.helper;
 
 import org.yaml.snakeyaml.Yaml;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Map;
 
 public class Configuration {
-    private Map<String, Object> configuration;
+    private String raw;
+    private Map<String, Object> parsed;
 
-    public Configuration(String path) throws IOException {
+    public Configuration(String configuration) throws IOException {
         Yaml yaml = new Yaml();
-        InputStream input = new FileInputStream(new File(path));
-
-        this.configuration = yaml.load(input);
+        this.parsed = yaml.load(configuration);
+        this.raw = configuration;
     }
 
-    public Map<String, Object> getConfiguration() {
-        return configuration;
+    public Map<String, Object> getParsed() {
+        return parsed;
+    }
+
+    public void setRaw(String raw) {
+        this.raw = raw;
     }
 }
