@@ -29,4 +29,16 @@ public class EnvSizeTest {
 
         assertEquals(Integer.valueOf(0), feature.getSize());
     }
+
+    @Test
+    public void noGlobalOrJobs() throws IOException {
+        String configuration = "env:\n" +
+                "  - PXT_ENV=production CXX=g++-4.8\n";
+        Evaluation evaluation = Evaluation.createFromConfiguration(configuration);
+
+        EnvSize feature = new EnvSize();
+        feature.extract(evaluation);
+
+        assertEquals(Integer.valueOf(1), feature.getSize());
+    }
 }

@@ -2,7 +2,6 @@ package ch.uzh.ciclassifier.features;
 
 import ch.uzh.ciclassifier.evaluation.Evaluation;
 import ch.uzh.ciclassifier.helper.Configuration;
-import ch.uzh.ciclassifier.helper.TravisCI;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,23 +14,24 @@ public class EnvSize implements Feature {
     public void extract(Evaluation evaluation) throws IOException {
         Configuration configuration = evaluation.getConfiguration();
 
+        this.size = 0;
         if (!configuration.getParsed().containsKey("env")) {
-            this.size = 0;
             return;
         }
 
+        if (configuration.getParsed().get("env") instanceof ArrayList) {
+            this.size = ((ArrayList) configuration.getParsed().get("env")).size();
+            return;
+        }
         LinkedHashMap env = (LinkedHashMap) configuration.getParsed().get("env");
-        int counter = 0;
 
         if (env.containsKey("global")) {
-            counter += ((ArrayList) env.get("global")).size();
+            this.size += ((ArrayList) env.get("global")).size();
         }
 
         if (env.containsKey("jobs")) {
-            counter += ((ArrayList) env.get("jobs")).size();
+            this.size += ((ArrayList) env.get("jobs")).size();
         }
-
-        this.size = counter;
     }
 
     @Override

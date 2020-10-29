@@ -1,5 +1,7 @@
 package ch.uzh.ciclassifier.helper;
 
+import ch.uzh.ciclassifier.CIClassifier;
+import ch.uzh.ciclassifier.evaluation.Evaluation;
 import ch.uzh.ciclassifier.exception.ConfigurationMissingException;
 import org.apache.commons.io.FileUtils;
 import org.eclipse.jgit.api.Git;
@@ -20,6 +22,8 @@ public class Repository {
     private String name = null;
 
     public Repository(String url) throws IOException {
+        CIClassifier.LOGGER.info("Fetching Repository");
+
         String repoName = url.replace("https://github.com/", "");
         if (repoName.endsWith(".git")) {
             repoName = repoName.substring(0, repoName.length() - 4);
@@ -48,6 +52,7 @@ public class Repository {
         } catch (GitAPIException e) {
             e.printStackTrace();
         }
+        CIClassifier.LOGGER.info("Done fetching repository");
     }
 
     public int getNumberOfFileChanges(String file) {

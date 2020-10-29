@@ -1,11 +1,9 @@
 package ch.uzh.ciclassifier.features;
 
 import ch.uzh.ciclassifier.evaluation.Evaluation;
-import ch.uzh.ciclassifier.helper.TravisCI;
+import ch.uzh.ciclassifier.helper.TravisCIHelper;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
 
 public class BuildTime implements Feature {
     private Integer duration;
@@ -13,7 +11,7 @@ public class BuildTime implements Feature {
 
     @Override
     public void extract(Evaluation evaluation) throws IOException {
-        this.duration = TravisCI.getBuildTime(evaluation.getRepository().getName());
+        this.duration = evaluation.getTravisCI().getBuildTime(evaluation.getRepository().getName());
     }
 
     @Override

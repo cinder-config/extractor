@@ -1,5 +1,6 @@
 package ch.uzh.ciclassifier.features;
 
+import ch.uzh.ciclassifier.evaluation.Evaluation;
 import ch.uzh.ciclassifier.helper.Repository;
 import org.junit.jupiter.api.Test;
 
@@ -11,11 +12,11 @@ public class BuildSuccessRatioTest {
 
     @Test
     public void extractTest() throws IOException {
-        String repository = "OCA/sale-workflow";
+        Evaluation evaluation = Evaluation.createFromGitUrl("https://github.com/tzemp/ciclassifier-sample-project.git");
 
         BuildSuccessRatio feature = new BuildSuccessRatio();
-        feature.extract(repository);
+        feature.extract(evaluation);
 
-        assertEquals(0.544, feature.getRatio(), 0.01);
+        assertEquals(Double.valueOf(0.5), feature.getRatio());
     }
 }
