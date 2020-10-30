@@ -9,7 +9,7 @@ public class HasBeforeInstall implements BaseFeature {
     private boolean beforeInstall = false;
 
     @Override
-    public void extract(String configPath) throws IOException {
+    public void extract(String configPath) throws Exception {
         Configuration configuration = new Configuration(configPath);
 
         ArrayList beforeInstall = (ArrayList) configuration.getParsed().get("before_install");

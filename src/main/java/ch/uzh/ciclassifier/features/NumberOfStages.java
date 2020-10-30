@@ -12,7 +12,7 @@ public class NumberOfStages implements BaseFeature {
     private Integer stages = null;
 
     @Override
-    public void extract(String configPath) throws IOException {
+    public void extract(String configPath) throws Exception {
         Configuration configuration = new Configuration(configPath);
         Set<String> stages = new HashSet<String>();
 

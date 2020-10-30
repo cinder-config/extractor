@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class BeforeScriptSizeTest {
 
     @Test
-    public void extractFeature() throws IOException {
+    public void extractFeature() throws Exception {
         BeforeScriptSize feature = new BeforeScriptSize();
         feature.extract("src/test/java/ch/uzh/ciclassifier/features/.test-travis-ci.yml");
 
@@ -17,7 +17,7 @@ public class BeforeScriptSizeTest {
     }
 
     @Test
-    public void extractZeroSize() throws IOException {
+    public void extractZeroSize() throws Exception {
         BeforeScriptSize feature = new BeforeScriptSize();
         feature.extract("src/test/java/ch/uzh/ciclassifier/features/.stages-travis-ci.yml");
 

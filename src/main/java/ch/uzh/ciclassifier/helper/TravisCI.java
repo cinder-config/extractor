@@ -20,11 +20,14 @@ public class TravisCI {
         JSONObject request = TravisCIHelper.travisCall("repo/" + URLEncoder.encode(repository) + "/builds?state=passed&limit=1", "GET", "", this.getApi());
 
         if (request.get("@type").equals("builds")) {
-            JSONObject latestBuild = (JSONObject) ((JSONArray) request.get("builds")).get(0);
+            try {
+                JSONObject latestBuild = (JSONObject) ((JSONArray) request.get("builds")).get(0);
 
-            Long duration = (Long) latestBuild.get("duration");
+                Long duration = (Long) latestBuild.get("duration");
 
-            return duration != null ? duration.intValue() : null;
+                return duration != null ? duration.intValue() : null;
+            } catch(IndexOutOfBoundsException ignored) {
+            }
         }
 
         return 0;

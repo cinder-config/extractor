@@ -48,8 +48,13 @@ public class Evaluation {
     public static Evaluation createFromConfiguration(String configuration) throws IOException {
         Evaluation evaluation = new Evaluation();
         evaluation.rawConfiguration = configuration;
-        evaluation.configuration = new Configuration(configuration);
-        evaluation.types.add(FeatureType.CONFIGURATION);
+
+        try {
+            evaluation.configuration = new Configuration(configuration);
+            evaluation.types.add(FeatureType.CONFIGURATION);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return evaluation;
     }
@@ -66,8 +71,12 @@ public class Evaluation {
         // Init Configuration
         String configuration = evaluation.repository.getConfiguration();
         evaluation.rawConfiguration = configuration;
-        evaluation.configuration = new Configuration(configuration);
-        evaluation.types.add(FeatureType.CONFIGURATION);
+        try {
+            evaluation.configuration = new Configuration(configuration);
+            evaluation.types.add(FeatureType.CONFIGURATION);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         // Init TravisCI
         String travisApi = TravisCIHelper.getApiForRepository(evaluation.repository.getName());

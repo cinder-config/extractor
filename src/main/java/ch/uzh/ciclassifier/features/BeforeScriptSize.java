@@ -9,7 +9,7 @@ public class BeforeScriptSize implements BaseFeature {
     private Integer size;
 
     @Override
-    public void extract(String configPath) throws IOException {
+    public void extract(String configPath) throws Exception {
         Configuration configuration = new Configuration(configPath);
 
         ArrayList beforeScript = (ArrayList) configuration.getParsed().get("before_script");

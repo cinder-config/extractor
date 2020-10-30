@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class HasBeforeInstallTest {
 
     @Test
-    public void extractPositiveTest() throws IOException {
+    public void extractPositiveTest() throws Exception {
         HasBeforeInstall feature = new HasBeforeInstall();
         feature.extract("src/test/java/ch/uzh/ciclassifier/features/.test-travis-ci.yml");
 
@@ -17,7 +17,7 @@ public class HasBeforeInstallTest {
     }
 
     @Test
-    public void extractNegativeTest() throws IOException {
+    public void extractNegativeTest() throws Exception {
         HasBeforeInstall feature = new HasBeforeInstall();
         feature.extract("src/test/java/ch/uzh/ciclassifier/features/.stages-travis-ci.yml");
 

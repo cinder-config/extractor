@@ -9,10 +9,14 @@ public class Configuration {
     private String raw;
     private Map<String, Object> parsed;
 
-    public Configuration(String configuration) throws IOException {
-        Yaml yaml = new Yaml();
-        this.parsed = yaml.load(configuration);
-        this.raw = configuration;
+    public Configuration(String configuration) throws Exception {
+        try {
+            Yaml yaml = new Yaml();
+            this.parsed = yaml.load(configuration);
+            this.raw = configuration;
+        } catch (Exception e) {
+            throw e;
+        }
     }
 
     public Map<String, Object> getParsed() {
