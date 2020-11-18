@@ -2,7 +2,6 @@ package ch.uzh.ciclassifier.helper;
 
 import ch.uzh.ciclassifier.exception.ConfigurationMissingException;
 import org.eclipse.jgit.api.errors.GitAPIException;
-import org.junit.Assert;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

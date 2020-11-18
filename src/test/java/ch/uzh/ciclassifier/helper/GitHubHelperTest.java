@@ -1,8 +1,6 @@
 package ch.uzh.ciclassifier.helper;
 
 import ch.uzh.ciclassifier.evaluation.Evaluation;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

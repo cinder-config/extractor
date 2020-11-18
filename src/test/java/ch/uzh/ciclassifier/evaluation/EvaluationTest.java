@@ -1,6 +1,5 @@
 package ch.uzh.ciclassifier.evaluation;
 
-import ch.uzh.ciclassifier.exception.ConfigurationMissingException;
 import ch.uzh.ciclassifier.exception.EvaluationNotPossibleException;
 import ch.uzh.ciclassifier.features.FeatureType;
 import org.json.simple.parser.ParseException;
@@ -8,8 +7,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class EvaluationTest {
 

@@ -1,7 +1,6 @@
 package ch.uzh.ciclassifier.features.github;
 
 import ch.uzh.ciclassifier.evaluation.Evaluation;
-import ch.uzh.ciclassifier.features.repository.ConfigChangeFrequency;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
