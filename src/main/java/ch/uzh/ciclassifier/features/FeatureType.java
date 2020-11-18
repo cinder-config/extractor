@@ -1,5 +1,5 @@
 package ch.uzh.ciclassifier.features;
 
 public enum FeatureType {
-    CONFIGURATION, REPOSITORY, TRAVISCI
+    CONFIGURATION, REPOSITORY, TRAVISCI, GITHUB
 }

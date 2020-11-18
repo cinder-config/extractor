@@ -1,0 +1,17 @@
+# a simple two line
+# comment
+cache:
+  directories:
+    - "#Home"
+    - '#Home'
+    - "#Home" #comment
+    - '#Home' #comment
+    - downloads
+language: java # inline comment
+# single line comment
+script:
+  - "#exec"# Execute something
+  - execute more # more execution
+  - "#exec2"
+  - no comment
+  - huuuu "#" #comment

@@ -1,29 +1,25 @@
 package ch.uzh.ciclassifier.evaluation;
 
 import ch.uzh.ciclassifier.CIClassifier;
-import ch.uzh.ciclassifier.features.BaseFeature;
+import ch.uzh.ciclassifier.exception.ConfigurationInvalidException;
+import ch.uzh.ciclassifier.exception.EvaluationNotPossibleException;
 import ch.uzh.ciclassifier.features.Feature;
 import ch.uzh.ciclassifier.features.FeatureType;
-import ch.uzh.ciclassifier.helper.Configuration;
-import ch.uzh.ciclassifier.helper.Repository;
-import ch.uzh.ciclassifier.helper.TravisCI;
-import ch.uzh.ciclassifier.helper.TravisCIHelper;
+import ch.uzh.ciclassifier.helper.*;
+import org.eclipse.jgit.api.errors.GitAPIException;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.ParseException;
 import org.reflections.Reflections;
 
-import javax.xml.catalog.CatalogFeatures;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
-import java.util.logging.Logger;
 
 public class Evaluation {
     private String identifier = null;
@@ -32,6 +28,7 @@ public class Evaluation {
     private Repository repository = null;
     private Configuration configuration = null;
     private TravisCI travisCI = null;
+    private GitHub gitHub = null;
     private List<Feature> features = new ArrayList<Feature>();
     private List<FeatureType> types = new ArrayList<FeatureType>();
 
@@ -52,30 +49,42 @@ public class Evaluation {
         try {
             evaluation.configuration = new Configuration(configuration);
             evaluation.types.add(FeatureType.CONFIGURATION);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (ConfigurationInvalidException e) {
+            throw new EvaluationNotPossibleException("Configuration Invalid");
+        } catch (ParseException e) {
+            throw new EvaluationNotPossibleException("Parse Error");
         }
 
         return evaluation;
     }
 
-    public static Evaluation createFromGitUrl(String gitUrl) throws IOException {
+    public static Evaluation createFromGitUrl(String gitUrl) {
         CIClassifier.LOGGER.info("Creating Evaluation from Git: " + gitUrl);
         Evaluation evaluation = new Evaluation();
 
         // Init Repository
         evaluation.gitUrl = gitUrl;
-        evaluation.repository = new Repository(gitUrl);
-        evaluation.types.add(FeatureType.REPOSITORY);
+        try {
+            evaluation.repository = new Repository(gitUrl);
+            evaluation.types.add(FeatureType.REPOSITORY);
+        } catch (IOException | GitAPIException e) {
+            throw new EvaluationNotPossibleException("Cannot clone from GitHub");
+        }
 
         // Init Configuration
-        String configuration = evaluation.repository.getConfiguration();
+        String configuration = null;
+        try {
+            configuration = evaluation.repository.getConfiguration();
+        } catch (Exception e) {
+            throw new EvaluationNotPossibleException("Cannot read configuration");
+        }
         evaluation.rawConfiguration = configuration;
+
         try {
             evaluation.configuration = new Configuration(configuration);
             evaluation.types.add(FeatureType.CONFIGURATION);
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new EvaluationNotPossibleException("Cannot parse configuration");
         }
 
         // Init TravisCI
@@ -85,7 +94,16 @@ public class Evaluation {
             evaluation.types.add(FeatureType.TRAVISCI);
         }
 
-        evaluation.identifier = evaluation.getRepository().getName().replace("/","_");
+        // Init GitHub
+        if (evaluation.repository != null) {
+            JSONObject githubData = GitHubHelper.getRepositoryData(evaluation.repository.getName());
+            if (null != githubData) {
+                evaluation.gitHub = new GitHub(githubData);
+                evaluation.types.add(FeatureType.GITHUB);
+            }
+        }
+
+        evaluation.identifier = evaluation.getRepository().getName().replace("/", "_");
 
         return evaluation;
     }
@@ -107,7 +125,12 @@ public class Evaluation {
     public JSONObject toJson() {
         JSONObject obj = new JSONObject();
         obj.put("identifier", this.getIdentifier());
-        obj.put("types", this.getTypes());
+
+        JSONArray types = new JSONArray();
+        for (FeatureType type : this.getTypes()) {
+            types.add(type.name());
+        }
+        obj.put("types", types);
 
         JSONObject features = new JSONObject();
         for (Feature feature : this.features) {
@@ -138,6 +161,10 @@ public class Evaluation {
         return travisCI;
     }
 
+    public GitHub getGitHub() {
+        return gitHub;
+    }
+
     public List<Feature> getFeatures() {
         return features;
     }
@@ -162,7 +189,7 @@ public class Evaluation {
             // generate a random number between
             // 0 to AlphaNumericString variable length
             int index
-                    = (int)(AlphaNumericString.length()
+                    = (int) (AlphaNumericString.length()
                     * Math.random());
 
             // add Character one by one in end of sb

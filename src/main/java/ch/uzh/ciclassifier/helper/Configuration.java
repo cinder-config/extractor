@@ -1,5 +1,9 @@
 package ch.uzh.ciclassifier.helper;
 
+import ch.uzh.ciclassifier.exception.ConfigurationInvalidException;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.ParseException;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.IOException;
@@ -7,23 +11,29 @@ import java.util.Map;
 
 public class Configuration {
     private String raw;
-    private Map<String, Object> parsed;
+    private JSONObject parsed;
+    private JSONArray matrix;
 
-    public Configuration(String configuration) throws Exception {
-        try {
-            Yaml yaml = new Yaml();
-            this.parsed = yaml.load(configuration);
-            this.raw = configuration;
-        } catch (Exception e) {
-            throw e;
+    public Configuration(String configuration) throws ConfigurationInvalidException, IOException, ParseException {
+        this.raw = configuration;
+
+        JSONObject parsed = TravisYmlHelper.parse(configuration);
+        if (parsed.containsKey("error")) {
+            throw new ConfigurationInvalidException();
         }
+        this.parsed = parsed;
+        this.matrix = TravisYmlHelper.expand(this.getParsed());
     }
 
-    public Map<String, Object> getParsed() {
+    public String getRaw() {
+        return raw;
+    }
+
+    public JSONObject getParsed() {
         return parsed;
     }
 
-    public void setRaw(String raw) {
-        this.raw = raw;
+    public JSONArray getMatrix() {
+        return matrix;
     }
 }

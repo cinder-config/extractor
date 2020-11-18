@@ -3,17 +3,22 @@ package ch.uzh.ciclassifier.helper;
 import ch.uzh.ciclassifier.CIClassifier;
 import ch.uzh.ciclassifier.evaluation.Evaluation;
 import ch.uzh.ciclassifier.exception.ConfigurationMissingException;
+import com.google.common.collect.Iterables;
 import org.apache.commons.io.FileUtils;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.revwalk.RevCommit;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 
 public class Repository {
     private final String TEMP_STORAGE = "tmp/";
@@ -21,7 +26,7 @@ public class Repository {
     private File location = null;
     private String name = null;
 
-    public Repository(String url) throws IOException {
+    public Repository(String url) throws GitAPIException, IOException {
         CIClassifier.LOGGER.info("Fetching Repository");
 
         String repoName = url.replace("https://github.com/", "");
@@ -44,29 +49,12 @@ public class Repository {
                     .forEach(File::delete);
             FileUtils.deleteDirectory(this.location);
         }
-        try {
-            this.git = Git.cloneRepository()
-                    .setURI(url)
-                    .setDirectory(this.location)
-                    .call();
-        } catch (GitAPIException e) {
-            e.printStackTrace();
-        }
-        CIClassifier.LOGGER.info("Done fetching repository");
-    }
+        this.git = Git.cloneRepository()
+                .setURI(url)
+                .setDirectory(this.location)
+                .call();
 
-    public int getNumberOfFileChanges(String file) {
-        try {
-            Iterable<RevCommit> logs = git.log().addPath(file).call();
-            int count = 0;
-            for (RevCommit revCommit : logs) {
-                count++;
-            }
-            return count;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return 0;
+        CIClassifier.LOGGER.info("Done fetching repository");
     }
 
     public Git getGit() {
@@ -85,5 +73,43 @@ public class Repository {
         }
 
         return Files.readString(Path.of(file.toURI()));
+    }
+
+    public Integer getNumberOfContributors() throws IOException, InterruptedException {
+        String line;
+        String[] cmd = {"git", "shortlog", "-s", "-n", "--all", "--no-merges"};
+        ProcessBuilder pb = new ProcessBuilder()
+                .command(cmd)
+                .directory(this.location);
+        Process p = pb.start();
+        p.waitFor();  // wait for process to finish then continue.
+
+        BufferedReader bri = new BufferedReader(new InputStreamReader(p.getInputStream()));
+        List<String> contributors = new ArrayList<String>();
+
+        // bri may be empty or incomplete.
+        while ((line = bri.readLine()) != null) {
+            contributors.add(line);
+        }
+
+        return contributors.size();
+    }
+
+    public Integer getNumberOfFileChanges(String file) {
+        try {
+            Iterable<RevCommit> logs = git.log().addPath(file).call();
+            int count = 0;
+            for (RevCommit revCommit : logs) {
+                count++;
+            }
+            return count;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public Integer getNumberOfCommits() throws GitAPIException {
+        return Iterables.size(git.log().call());
     }
 }
