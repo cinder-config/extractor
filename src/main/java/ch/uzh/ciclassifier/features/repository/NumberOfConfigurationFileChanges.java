@@ -3,12 +3,8 @@ package ch.uzh.ciclassifier.features.repository;
 import ch.uzh.ciclassifier.evaluation.Evaluation;
 import ch.uzh.ciclassifier.features.Feature;
 import ch.uzh.ciclassifier.features.FeatureType;
-import ch.uzh.ciclassifier.helper.Repository;
-import org.eclipse.jgit.api.Git;
 
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.LineNumberReader;
 
 public class NumberOfConfigurationFileChanges implements Feature {
     private Integer changes = null;

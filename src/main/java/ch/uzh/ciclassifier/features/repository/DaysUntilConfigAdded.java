@@ -5,12 +5,8 @@ import ch.uzh.ciclassifier.features.Feature;
 import ch.uzh.ciclassifier.features.FeatureType;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.revwalk.RevCommit;
-import org.eclipse.jgit.revwalk.RevSort;
-import org.eclipse.jgit.revwalk.RevWalk;
-import org.eclipse.jgit.treewalk.filter.PathFilter;
 
 import java.io.IOException;
-import java.util.stream.Stream;
 
 public class DaysUntilConfigAdded implements Feature {
     private Integer days = null;

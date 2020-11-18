@@ -4,10 +4,8 @@ import ch.uzh.ciclassifier.exception.ConfigurationInvalidException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
-import org.yaml.snakeyaml.Yaml;
 
 import java.io.IOException;
-import java.util.Map;
 
 public class Configuration {
     private String raw;

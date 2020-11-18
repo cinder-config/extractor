@@ -3,7 +3,6 @@ package ch.uzh.ciclassifier.features.configuration;
 import ch.uzh.ciclassifier.evaluation.Evaluation;
 import ch.uzh.ciclassifier.features.Feature;
 import ch.uzh.ciclassifier.features.FeatureType;
-import ch.uzh.ciclassifier.helper.Configuration;
 import org.json.simple.JSONObject;
 
 import java.io.IOException;

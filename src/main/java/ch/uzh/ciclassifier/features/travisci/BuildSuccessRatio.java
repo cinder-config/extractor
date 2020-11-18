@@ -3,7 +3,6 @@ package ch.uzh.ciclassifier.features.travisci;
 import ch.uzh.ciclassifier.evaluation.Evaluation;
 import ch.uzh.ciclassifier.features.Feature;
 import ch.uzh.ciclassifier.features.FeatureType;
-import ch.uzh.ciclassifier.helper.TravisCIHelper;
 
 import java.io.IOException;
 

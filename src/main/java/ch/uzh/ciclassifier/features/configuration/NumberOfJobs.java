@@ -6,10 +6,6 @@ import ch.uzh.ciclassifier.features.FeatureType;
 import org.json.simple.JSONArray;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-import java.util.Set;
 
 public class NumberOfJobs implements Feature {
     private Integer size = null;

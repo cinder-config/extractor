@@ -16,7 +16,6 @@ import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 
 public class GitHubHelper {
 

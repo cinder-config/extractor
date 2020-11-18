@@ -4,7 +4,6 @@ import ch.uzh.ciclassifier.evaluation.Evaluation;
 import ch.uzh.ciclassifier.features.Feature;
 import ch.uzh.ciclassifier.features.FeatureType;
 
-import java.io.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

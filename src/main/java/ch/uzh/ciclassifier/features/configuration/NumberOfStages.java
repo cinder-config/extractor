@@ -3,12 +3,13 @@ package ch.uzh.ciclassifier.features.configuration;
 import ch.uzh.ciclassifier.evaluation.Evaluation;
 import ch.uzh.ciclassifier.features.Feature;
 import ch.uzh.ciclassifier.features.FeatureType;
-import ch.uzh.ciclassifier.helper.Configuration;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
 public class NumberOfStages implements Feature {
     private Integer size = null;
