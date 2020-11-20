@@ -1,6 +1,7 @@
 package ch.uzh.ciclassifier;
 
 import ch.uzh.ciclassifier.evaluation.Evaluation;
+import ch.uzh.ciclassifier.exception.EvaluationNotPossibleException;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
 
@@ -28,24 +29,28 @@ public class CIClassifier {
 
                 String shortName = values[1].replace("https://api.github.com/repos/","");
                 String gitUrl = "https://github.com/" + shortName + ".git";
-                String filePath = "data/results3/" + shortName.replace("/","_") + ".json";
+                String filePath = "data/features_with_github/" + shortName.replace("/","_") + ".json";
 
                 File file = new File(filePath);
                 if (file.exists()) {
                     continue;
                 }
 
-                Evaluation evaluation = Evaluation.createFromGitUrl(gitUrl);
-                evaluation.evaluate();
+                try {
+                    Evaluation evaluation = Evaluation.createFromGitUrl(gitUrl);
+                    evaluation.evaluate();
 
-                //Write JSON file
-                try (FileWriter fileWriter = new FileWriter(filePath)) {
+                    //Write JSON file
+                    try (FileWriter fileWriter = new FileWriter(filePath)) {
 
-                    fileWriter.write(evaluation.toJson().toJSONString());
-                    fileWriter.flush();
+                        fileWriter.write(evaluation.toJson().toJSONString());
+                        fileWriter.flush();
 
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                } catch (EvaluationNotPossibleException e) {
+                    CIClassifier.LOGGER.info("Evaluation not possible, reason: " + e.getMessage());
                 }
 
             }
