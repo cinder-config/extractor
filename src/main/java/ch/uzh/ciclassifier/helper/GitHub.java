@@ -12,4 +12,12 @@ public class GitHub {
     public JSONObject getData() {
         return data;
     }
+
+    public String getName() {
+        return (String) this.data.get("full_name");
+    }
+
+    public String getDefaultBranch() {
+        return (String) this.data.get("default_branch");
+    }
 }

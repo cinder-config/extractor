@@ -110,4 +110,8 @@ public class Repository {
     public Integer getNumberOfCommits() throws GitAPIException {
         return Iterables.size(git.log().call());
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }

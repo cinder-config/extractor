@@ -66,7 +66,7 @@ public class Evaluation {
         evaluation.gitUrl = gitUrl;
         try {
             evaluation.repository = new Repository(gitUrl);
-            evaluation.types.add(FeatureType.REPOSITORY);
+            evaluation.getTypes().add(FeatureType.REPOSITORY);
         } catch (IOException | GitAPIException e) {
             throw new EvaluationNotPossibleException("Cannot clone from GitHub");
         }
@@ -82,26 +82,30 @@ public class Evaluation {
 
         try {
             evaluation.configuration = new Configuration(configuration);
-            evaluation.types.add(FeatureType.CONFIGURATION);
+            evaluation.getTypes().add(FeatureType.CONFIGURATION);
         } catch (Exception e) {
             throw new EvaluationNotPossibleException("Cannot parse configuration");
         }
 
-        // Init TravisCI
-        String travisApi = TravisCIHelper.getApiForRepository(evaluation.repository.getName());
-        if (null != travisApi) {
-            evaluation.travisCI = new TravisCI(travisApi);
-            evaluation.types.add(FeatureType.TRAVISCI);
-        }
-
         // Init GitHub
         if (evaluation.repository != null) {
-            JSONObject githubData = GitHubHelper.getRepositoryData(evaluation.repository.getName());
+            JSONObject githubData = GitHubHelper.getRepositoryData(evaluation.getRepository().getName());
             if (null != githubData) {
                 evaluation.gitHub = new GitHub(githubData);
-                evaluation.types.add(FeatureType.GITHUB);
+                evaluation.getRepository().setName(evaluation.getGitHub().getName()); //override name in case it was renamed
+                evaluation.getTypes().add(FeatureType.GITHUB);
             }
         }
+
+        // Init TravisCI
+        if (evaluation.getGitHub() != null) {
+            String travisApi = TravisCIHelper.getApiForRepository(evaluation.getRepository().getName());
+            if (null != travisApi) {
+                evaluation.travisCI = new TravisCI(travisApi, evaluation.getGitHub());
+                evaluation.types.add(FeatureType.TRAVISCI);
+            }
+        }
+
 
         evaluation.identifier = evaluation.getRepository().getName().replace("/", "_");
 

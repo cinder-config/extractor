@@ -7,15 +7,15 @@ import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class BuildTimeTest {
+public class ManualInteractionRatioTest {
 
     @Test
-    public void buildTimeTest() throws IOException {
+    public void extractTest() throws IOException {
         Evaluation evaluation = Evaluation.createFromGitUrl("https://github.com/tzemp/ciclassifier-sample-project.git");
 
-        BuildTime feature = new BuildTime();
+        ManualInteractionRatio feature = new ManualInteractionRatio();
         feature.extract(evaluation);
 
-        assertEquals(Integer.valueOf(42), feature.getDuration());
+        assertEquals("0.125", feature.getData());
     }
 }
