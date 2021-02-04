@@ -38,7 +38,7 @@ public class TravisCIHelper {
 
             return (JSONObject) parser.parse(EntityUtils.toString(entity));
 
-        } catch (IOException | ParseException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

@@ -6,7 +6,9 @@ import com.google.common.collect.Iterables;
 import org.apache.commons.io.FileUtils;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
+import org.eclipse.jgit.lib.RepositoryCache;
 import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.util.FS;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -19,7 +21,7 @@ import java.util.Comparator;
 import java.util.List;
 
 public class Repository {
-    private final String TEMP_STORAGE = "tmp/";
+    private final String TEMP_STORAGE = "/Volumes/Data/Masterarbeit/repos/";
     private Git git = null;
     private File location = null;
     private String name = null;
@@ -35,22 +37,31 @@ public class Repository {
             url = url + ".git";
         }
         this.name = repoName;
-        String[] parts = repoName.split("/");
-        String name = parts[1];
+        String name = repoName.replace("/","_");
         this.location = new File(TEMP_STORAGE + name);
         Path pathToBeDeleted = Path.of(TEMP_STORAGE + name);
 
         if (this.location.exists()) {
-            Files.walk(pathToBeDeleted)
-                    .sorted(Comparator.reverseOrder())
-                    .map(Path::toFile)
-                    .forEach(File::delete);
-            FileUtils.deleteDirectory(this.location);
+            try {
+                this.git = Git.open(this.location);
+            } catch (Exception e) {
+                Files.walk(pathToBeDeleted)
+                        .sorted(Comparator.reverseOrder())
+                        .map(Path::toFile)
+                        .forEach(File::delete);
+                FileUtils.deleteDirectory(this.location);
+
+                this.git = Git.cloneRepository()
+                        .setURI(url)
+                        .setDirectory(this.location)
+                        .call();
+            }
+        } else {
+            this.git = Git.cloneRepository()
+                    .setURI(url)
+                    .setDirectory(this.location)
+                    .call();
         }
-        this.git = Git.cloneRepository()
-                .setURI(url)
-                .setDirectory(this.location)
-                .call();
 
         CIClassifier.LOGGER.info("Done fetching repository");
     }

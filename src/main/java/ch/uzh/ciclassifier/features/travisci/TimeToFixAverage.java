@@ -39,7 +39,7 @@ public class TimeToFixAverage implements Feature {
                     Long seconds = (datePassedBuild.getTime() - dateFailedBuild.getTime()) / 1000;
                     differences.add(seconds);
 
-                } catch (ParseException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
 
                 } finally {

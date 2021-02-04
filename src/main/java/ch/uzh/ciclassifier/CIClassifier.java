@@ -18,7 +18,7 @@ public class CIClassifier {
 
     public static void main(String[] args) throws IOException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
 
-        try (CSVReader csvReader = new CSVReader(new FileReader("data/extract4.csv"));) {
+        try (CSVReader csvReader = new CSVReader(new FileReader("data/more_truth.csv"));) {
             String[] values = null;
             boolean first = true;
             while ((values = csvReader.readNext()) != null) {
@@ -27,9 +27,10 @@ public class CIClassifier {
                     continue;
                 }
 
-                String shortName = values[1].replace("https://api.github.com/repos/","");
+                // String shortName = values[1].replace("https://api.github.com/repos/","");
+                String shortName = values[10];
                 String gitUrl = "https://github.com/" + shortName + ".git";
-                String filePath = "data/features_with_github/" + shortName.replace("/","_") + ".json";
+                String filePath = "data/more_truth/" + shortName.replace("/","_") + ".json";
 
                 File file = new File(filePath);
                 if (file.exists()) {

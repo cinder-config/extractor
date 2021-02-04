@@ -84,6 +84,7 @@ public class Evaluation {
             evaluation.configuration = new Configuration(configuration);
             evaluation.getTypes().add(FeatureType.CONFIGURATION);
         } catch (Exception e) {
+            e.printStackTrace();
             throw new EvaluationNotPossibleException("Cannot parse configuration");
         }
 
@@ -115,7 +116,6 @@ public class Evaluation {
     public void evaluate() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException, IOException {
         Reflections reflections = new Reflections("ch.uzh.ciclassifier.features");
         Set<Class<? extends Feature>> classes = reflections.getSubTypesOf(Feature.class);
-        System.out.println(classes);
         for (Class clazz : classes) {
             Constructor<?> constructor = clazz.getConstructor();
             Feature feature = (Feature) constructor.newInstance();
@@ -138,7 +138,11 @@ public class Evaluation {
 
         JSONObject features = new JSONObject();
         for (Feature feature : this.features) {
-            features.put(feature.getClass().getName(), feature.getData());
+            try {
+                features.put(feature.getClass().getName(), feature.getData());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         obj.put("features", features);
 
