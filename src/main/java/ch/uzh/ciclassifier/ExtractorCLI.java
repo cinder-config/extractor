@@ -24,8 +24,8 @@ public class ExtractorCLI {
 
     public static void main(String[] args) throws IOException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
 
-        LogManager.getRootLogger().setLevel(Level.OFF);
-        org.apache.logging.log4j.LogManager.getRootLogger().atLevel(org.apache.logging.log4j.Level.OFF);
+        LogManager.getRootLogger().setLevel(Level.DEBUG);
+        org.apache.logging.log4j.LogManager.getRootLogger().atLevel(org.apache.logging.log4j.Level.DEBUG);
 
         try (CSVReader csvReader = new CSVReader(new FileReader("data/subset.csv"));) {
             String[] values = null;
