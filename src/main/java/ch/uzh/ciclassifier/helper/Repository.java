@@ -1,14 +1,13 @@
 package ch.uzh.ciclassifier.helper;
 
-import ch.uzh.ciclassifier.CIClassifier;
+import ch.uzh.ciclassifier.Extractor;
 import ch.uzh.ciclassifier.exception.ConfigurationMissingException;
 import com.google.common.collect.Iterables;
 import org.apache.commons.io.FileUtils;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
-import org.eclipse.jgit.lib.RepositoryCache;
+import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.revwalk.RevCommit;
-import org.eclipse.jgit.util.FS;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -18,6 +17,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 
 public class Repository {
@@ -27,7 +27,7 @@ public class Repository {
     private String name = null;
 
     public Repository(String url) throws GitAPIException, IOException {
-        CIClassifier.LOGGER.info("Fetching Repository");
+        Extractor.LOGGER.info("Fetching Repository");
 
         String repoName = url.replace("https://github.com/", "");
         if (repoName.endsWith(".git")) {
@@ -63,7 +63,7 @@ public class Repository {
                     .call();
         }
 
-        CIClassifier.LOGGER.info("Done fetching repository");
+        Extractor.LOGGER.info("Done fetching repository");
     }
 
     public Git getGit() {
@@ -117,6 +117,24 @@ public class Repository {
         }
         return 0;
     }
+
+    public Integer getNumberOfContributorsOnFile(String file) {
+        HashSet<String> contributors = new HashSet<>();
+        try {
+            Iterable<RevCommit> logs = git.log().addPath(file).call();
+            for (RevCommit revCommit : logs) {
+                PersonIdent contributor = revCommit.getCommitterIdent();
+                if (null != contributor) {
+                    contributors.add(contributor.getName());
+                }
+            }
+            return contributors.size();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
 
     public Integer getNumberOfCommits() throws GitAPIException {
         return Iterables.size(git.log().call());

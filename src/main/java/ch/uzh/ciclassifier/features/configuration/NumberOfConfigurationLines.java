@@ -8,7 +8,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class NumberOfConfigurationLines implements Feature {
-    private Integer lines = null;
+    private Integer lines = 0;
 
     @Override
     public void extract(Evaluation evaluation) {

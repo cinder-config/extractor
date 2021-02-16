@@ -16,7 +16,7 @@ import java.util.OptionalDouble;
 public class TimeToFixLatestAverage implements Feature {
     private static final double LATEST_THRESHOLD = 0.1; // Only take the first 10% of all builds
 
-    private Double time;
+    private Double time = 0.0;
 
     @Override
     public void extract(Evaluation evaluation) throws IOException {

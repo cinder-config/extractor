@@ -8,7 +8,7 @@ import org.json.simple.JSONArray;
 import java.io.IOException;
 
 public class NumberOfJobs implements Feature {
-    private Integer size = null;
+    private Integer size = 0;
 
     @Override
     public void extract(Evaluation evaluation) throws IOException {

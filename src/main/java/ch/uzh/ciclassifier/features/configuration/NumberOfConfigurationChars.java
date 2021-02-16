@@ -5,7 +5,7 @@ import ch.uzh.ciclassifier.features.Feature;
 import ch.uzh.ciclassifier.features.FeatureType;
 
 public class NumberOfConfigurationChars implements Feature {
-    private Integer chars = null;
+    private Integer chars = 0;
 
     @Override
     public void extract(Evaluation evaluation) {

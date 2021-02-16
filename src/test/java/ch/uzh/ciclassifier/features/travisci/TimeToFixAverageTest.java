@@ -18,14 +18,4 @@ public class TimeToFixAverageTest {
 
         assertEquals("107.5", feature.getData());
     }
-
-    @Test
-    public void extract2Test() throws IOException {
-        Evaluation evaluation = Evaluation.createFromGitUrl("https://github.com/OCA/sale-workflow.git");
-
-        TimeToFixAverage feature = new TimeToFixAverage();
-        feature.extract(evaluation);
-
-        assertEquals("100085.67567567568", feature.getData());
-    }
 }

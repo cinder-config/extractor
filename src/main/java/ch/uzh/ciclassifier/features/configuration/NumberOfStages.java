@@ -12,7 +12,7 @@ import java.util.Objects;
 import java.util.Set;
 
 public class NumberOfStages implements Feature {
-    private Integer size = null;
+    private Integer size = 0;
 
     @Override
     public void extract(Evaluation evaluation) throws IOException {

@@ -38,7 +38,7 @@ public class DaysUntilConfigAdded implements Feature {
 
             this.days = Math.round(diff / 60f / 60f / 24f);
         } catch (Exception e) {
-            e.printStackTrace();
+            this.days = 0;
         }
     }
 

@@ -18,14 +18,4 @@ public class BuildTimeLatestAverageTest {
 
         assertEquals("39.75", feature.getData());
     }
-
-    @Test
-    public void extract2Test() throws IOException {
-        Evaluation evaluation = Evaluation.createFromGitUrl("https://github.com/OCA/sale-workflow.git");
-
-        BuildTimeLatestAverage feature = new BuildTimeLatestAverage();
-        feature.extract(evaluation);
-
-        assertEquals("879.36", feature.getData());
-    }
 }

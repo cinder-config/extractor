@@ -1,10 +1,11 @@
 package ch.uzh.ciclassifier.evaluation;
 
-import ch.uzh.ciclassifier.CIClassifier;
+import ch.uzh.ciclassifier.Extractor;
 import ch.uzh.ciclassifier.exception.ConfigurationInvalidException;
 import ch.uzh.ciclassifier.exception.EvaluationNotPossibleException;
 import ch.uzh.ciclassifier.features.Feature;
 import ch.uzh.ciclassifier.features.FeatureType;
+import ch.uzh.ciclassifier.features.configuration.TemplateSimilarity;
 import ch.uzh.ciclassifier.helper.*;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.json.simple.JSONArray;
@@ -59,7 +60,7 @@ public class Evaluation {
     }
 
     public static Evaluation createFromGitUrl(String gitUrl) {
-        CIClassifier.LOGGER.info("Creating Evaluation from Git: " + gitUrl);
+        Extractor.LOGGER.info("Creating Evaluation from Git: " + gitUrl);
         Evaluation evaluation = new Evaluation();
 
         // Init Repository
@@ -100,10 +101,15 @@ public class Evaluation {
 
         // Init TravisCI
         if (evaluation.getGitHub() != null) {
-            String travisApi = TravisCIHelper.getApiForRepository(evaluation.getRepository().getName());
-            if (null != travisApi) {
-                evaluation.travisCI = new TravisCI(travisApi, evaluation.getGitHub());
-                evaluation.types.add(FeatureType.TRAVISCI);
+            try {
+                String travisApi = TravisCIHelper.getApiForRepository(evaluation.getRepository().getName());
+                if (null != travisApi) {
+                    evaluation.travisCI = new TravisCI(travisApi, evaluation.getGitHub());
+                    evaluation.types.add(FeatureType.TRAVISCI);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new EvaluationNotPossibleException("Cannot connect to Travis-CI");
             }
         }
 

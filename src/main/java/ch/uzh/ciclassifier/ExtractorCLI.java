@@ -4,21 +4,30 @@ import ch.uzh.ciclassifier.evaluation.Evaluation;
 import ch.uzh.ciclassifier.exception.EvaluationNotPossibleException;
 import com.opencsv.CSVReader;
 import com.opencsv.exceptions.CsvValidationException;
+import org.apache.log4j.Level;
+import org.apache.log4j.LogManager;
+import org.json.simple.JSONObject;
 
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.logging.Logger;
 
-public class CIClassifier {
+public class ExtractorCLI {
 
-    public final static Logger LOGGER = Logger.getLogger(CIClassifier.class.getName());
+    public final static Logger LOGGER = Logger.getLogger(Extractor.class.getName());
 
     public static void main(String[] args) throws IOException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
 
-        try (CSVReader csvReader = new CSVReader(new FileReader("data/more_truth.csv"));) {
+        LogManager.getRootLogger().setLevel(Level.OFF);
+        org.apache.logging.log4j.LogManager.getRootLogger().atLevel(org.apache.logging.log4j.Level.OFF);
+
+        try (CSVReader csvReader = new CSVReader(new FileReader("data/subset.csv"));) {
             String[] values = null;
             boolean first = true;
             while ((values = csvReader.readNext()) != null) {
@@ -27,13 +36,16 @@ public class CIClassifier {
                     continue;
                 }
 
-                // String shortName = values[1].replace("https://api.github.com/repos/","");
-                String shortName = values[10];
+                //String shortName = values[1].replace("https://api.github.com/repos/","");
+                String shortName = values[1];
                 String gitUrl = "https://github.com/" + shortName + ".git";
-                String filePath = "data/more_truth/" + shortName.replace("/","_") + ".json";
+                String filePath = "data/new_extraction/" + shortName.replace("/","_") + ".json";
+
+                Extractor.LOGGER.info("Starting evaluation for " + shortName);
 
                 File file = new File(filePath);
                 if (file.exists()) {
+                    Extractor.LOGGER.info("Skipping... " + shortName);
                     continue;
                 }
 
@@ -44,14 +56,18 @@ public class CIClassifier {
                     //Write JSON file
                     try (FileWriter fileWriter = new FileWriter(filePath)) {
 
-                        fileWriter.write(evaluation.toJson().toJSONString());
+                        JSONObject res = evaluation.toJson();
+                        res.put("db-identifier",values[0]);
+                        fileWriter.write(res.toJSONString());
                         fileWriter.flush();
+
+                        Extractor.LOGGER.info("Done evaluation for " + shortName);
 
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 } catch (EvaluationNotPossibleException e) {
-                    CIClassifier.LOGGER.info("Evaluation not possible, reason: " + e.getMessage());
+                    Extractor.LOGGER.severe("Evaluation not possible for project " + shortName + ", reason: " + e.getMessage());
                 }
 
             }

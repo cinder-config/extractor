@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.OptionalDouble;
 
 public class PullRequestRatio implements Feature {
-    private Double ratio;
+    private Double ratio = 0.0;
 
     @Override
     public void extract(Evaluation evaluation) throws IOException {

@@ -7,7 +7,7 @@ import ch.uzh.ciclassifier.features.FeatureType;
 import java.io.IOException;
 
 public class BuildSuccessRatio implements Feature {
-    private Double ratio;
+    private Double ratio = 0.0;
 
     public Double getRatio() {
         return ratio;

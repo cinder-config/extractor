@@ -1,4 +1,4 @@
-package ch.uzh.ciclassifier.features.travisci;
+package ch.uzh.ciclassifier.features.repository;
 
 import ch.uzh.ciclassifier.evaluation.Evaluation;
 import org.junit.jupiter.api.Test;
@@ -7,15 +7,15 @@ import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class BuildTimeAverageTest {
+public class NumberOfContributorsOnConfigurationFileTest {
 
     @Test
-    public void extractText() throws IOException {
+    public void extractTest() throws IOException {
         Evaluation evaluation = Evaluation.createFromGitUrl("https://github.com/tzemp/ciclassifier-sample-project.git");
 
-        BuildTimeAverage feature = new BuildTimeAverage();
+        NumberOfContributorsOnConfigurationFile feature = new NumberOfContributorsOnConfigurationFile();
         feature.extract(evaluation);
 
-        assertEquals("39.75", feature.getData());
+        assertEquals("1", feature.getData());
     }
 }

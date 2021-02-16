@@ -12,7 +12,7 @@ import java.util.OptionalDouble;
 
 public class BuildTimeLatestAverage implements Feature {
     private static final int LATEST_THRESHOLD = 25; // Only take the latest 25 builds
-    private Double average;
+    private Double average = 0.0;
 
     @Override
     public void extract(Evaluation evaluation) throws IOException {

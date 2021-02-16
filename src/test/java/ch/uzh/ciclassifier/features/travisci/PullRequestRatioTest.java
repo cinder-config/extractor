@@ -18,15 +18,4 @@ public class PullRequestRatioTest {
 
         assertEquals("0.0", feature.getData());
     }
-
-    @Test
-    public void extract2Test() throws IOException {
-        Evaluation evaluation = Evaluation.createFromGitUrl("https://github.com/OCA/sale-workflow.git");
-
-
-        PullRequestRatio feature = new PullRequestRatio();
-        feature.extract(evaluation);
-
-        assertEquals("0.8240963855421687", feature.getData());
-    }
 }

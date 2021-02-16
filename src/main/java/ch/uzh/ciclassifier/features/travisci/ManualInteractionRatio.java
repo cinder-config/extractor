@@ -9,7 +9,7 @@ import java.io.IOException;
 import java.util.List;
 
 public class ManualInteractionRatio implements Feature {
-    private Double ratio;
+    private Double ratio = 0.0;
 
     @Override
     public void extract(Evaluation evaluation) throws IOException {

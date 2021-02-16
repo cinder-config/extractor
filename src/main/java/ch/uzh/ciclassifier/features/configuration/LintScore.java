@@ -11,7 +11,7 @@ import org.json.simple.JSONObject;
 import java.io.IOException;
 
 public class LintScore implements Feature {
-    private Integer score;
+    private Integer score = 0;
 
     public Integer getScore() {
         return score;

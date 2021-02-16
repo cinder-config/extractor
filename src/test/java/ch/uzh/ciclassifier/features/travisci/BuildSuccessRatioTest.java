@@ -16,6 +16,6 @@ public class BuildSuccessRatioTest {
         BuildSuccessRatio feature = new BuildSuccessRatio();
         feature.extract(evaluation);
 
-        assertEquals("0.5714285714285714", feature.getData());
+        assertEquals("0.5", feature.getData());
     }
 }

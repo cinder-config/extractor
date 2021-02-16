@@ -7,7 +7,7 @@ import ch.uzh.ciclassifier.features.FeatureType;
 import java.io.IOException;
 
 public class NumberOfConfigurationFileChanges implements Feature {
-    private Integer changes = null;
+    private Integer changes = 0;
 
     @Override
     public void extract(Evaluation evaluation) throws IOException {

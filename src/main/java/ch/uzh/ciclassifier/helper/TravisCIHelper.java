@@ -71,11 +71,12 @@ public class TravisCIHelper {
     }
 
     public static String getApiForRepository(String repository) {
+
         JSONObject apiOrgRequest = TravisCIHelper.travisCall("repo/" + URLEncoder.encode(repository), "GET", "", API_ORG);
 
-        if (apiOrgRequest.get("@type").equals("error") || apiOrgRequest.get("active").equals(false)) {
+        if (apiOrgRequest.get("@type").equals("error") /*|| apiOrgRequest.get("active").equals(false)*/) {
             JSONObject apiComRequest = TravisCIHelper.travisCall("repo/" + URLEncoder.encode(repository), "GET", "", API_COM);
-            if (apiComRequest.get("@type").equals("error") || apiComRequest.get("active").equals(false)) {
+            if (apiComRequest.get("@type").equals("error") /*|| apiComRequest.get("active").equals(false)*/) {
                 return null;
             }
             return API_COM;

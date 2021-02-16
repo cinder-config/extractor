@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.OptionalDouble;
 
 public class BuildTimeAverage implements Feature {
-    private Double average;
+    private Double average = 0.0;
 
 
     @Override

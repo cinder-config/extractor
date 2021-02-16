@@ -11,13 +11,13 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class UniqueInstructions implements Feature {
-    private Integer size = null;
+    private Integer size = 0;
 
     @Override
     public void extract(Evaluation evaluation) throws IOException {
         JSONArray matrix = evaluation.getConfiguration().getMatrix();
         Set<String> instructions = new HashSet<>();
-        String[] types = {"before_install", "install", "before_script", "script","before_cache"};
+        String[] types = {"before_install", "install", "before_script", "script", "before_cache"};
 
         for (Object o : matrix) {
             JSONObject job = (JSONObject) o;

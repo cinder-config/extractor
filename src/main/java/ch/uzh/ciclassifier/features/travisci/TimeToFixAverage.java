@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.OptionalDouble;
 
 public class TimeToFixAverage implements Feature {
-    private Double time;
+    private Double time = 0.0;
 
     @Override
     public void extract(Evaluation evaluation) throws IOException {

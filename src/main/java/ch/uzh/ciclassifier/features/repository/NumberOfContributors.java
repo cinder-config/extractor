@@ -7,7 +7,7 @@ import ch.uzh.ciclassifier.features.FeatureType;
 import java.io.IOException;
 
 public class NumberOfContributors implements Feature {
-    private Integer contributors = null;
+    private Integer contributors = 0;
 
     @Override
     public void extract(Evaluation evaluation) throws IOException {

@@ -74,13 +74,27 @@ public class TravisCI {
         if (!builds.isEmpty()) {
             return this.builds;
         }
+        String defaultBranch = this.getGitHub().getDefaultBranch();
+        String differentBranch = "";
         try {
             JSONObject travisResponse;
-            String next = "repo/" + URLEncoder.encode(this.getGitHub().getName(), StandardCharsets.UTF_8) + "/builds?branch.name=" + URLEncoder.encode(this.getGitHub().getDefaultBranch(), StandardCharsets.UTF_8);
+            String next = "repo/" + URLEncoder.encode(this.getGitHub().getName(), StandardCharsets.UTF_8) + "/builds?branch.name=" + URLEncoder.encode(defaultBranch, StandardCharsets.UTF_8);
 
             while (next != null) {
                 travisResponse = TravisCIHelper.travisCall(next, "GET", "", this.getApi());
                 JSONArray tmpBuilds = (JSONArray) travisResponse.get("builds");
+
+                if (tmpBuilds.size() == 0 && this.builds.isEmpty() && differentBranch.equals("")) {
+                    // Try other default branch
+                    JSONObject travisData = TravisCIHelper.travisCall("repo/" + URLEncoder.encode(this.getGitHub().getName(), StandardCharsets.UTF_8), "GET", "", this.getApi());
+
+                    JSONObject travisDefaultBranch = (JSONObject) travisData.get("default_branch");
+                    differentBranch = (String) travisDefaultBranch.get("name");
+
+                    next = "repo/" + URLEncoder.encode(this.getGitHub().getName(), StandardCharsets.UTF_8) + "/builds?branch.name=" + URLEncoder.encode(differentBranch, StandardCharsets.UTF_8);
+                    travisResponse = TravisCIHelper.travisCall(next, "GET", "", this.getApi());
+                    tmpBuilds = (JSONArray) travisResponse.get("builds");
+                }
                 for (Object tmpBuild : tmpBuilds) {
                     this.builds.add((JSONObject) tmpBuild);
                 }
