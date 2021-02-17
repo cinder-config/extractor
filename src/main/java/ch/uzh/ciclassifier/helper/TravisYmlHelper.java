@@ -1,5 +1,6 @@
 package ch.uzh.ciclassifier.helper;
 
+import io.github.cdimascio.dotenv.Dotenv;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -19,8 +20,10 @@ public class TravisYmlHelper {
     public static final String API = "http://127.0.0.1:9292";
 
     public static JSONObject parse(String configuration) throws IOException, ParseException {
+        Dotenv dotenv = Dotenv.load();
+
         CloseableHttpClient httpClient = HttpClients.createDefault();
-        HttpPost request = new HttpPost(TravisYmlHelper.API + "/v1/parse");
+        HttpPost request = new HttpPost(dotenv.get("TRAVIS_YML_API_URL") + "/v1/parse");
         request.setEntity(new StringEntity(configuration));
 
         CloseableHttpResponse response = httpClient.execute(request);
@@ -31,8 +34,10 @@ public class TravisYmlHelper {
     }
 
     public static JSONArray expand(JSONObject configuration) throws IOException, ParseException {
+        Dotenv dotenv = Dotenv.load();
+
         CloseableHttpClient httpClient = HttpClients.createDefault();
-        HttpPost request = new HttpPost(TravisYmlHelper.API + "/v1/expand");
+        HttpPost request = new HttpPost(dotenv.get("TRAVIS_YML_API_URL") + "/v1/expand");
         request.setEntity(new StringEntity(configuration.toJSONString()));
 
         CloseableHttpResponse response = httpClient.execute(request);
